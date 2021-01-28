@@ -123,7 +123,7 @@ select card_no
 from book_lending
 where date_out between '2017-01-01' and '2017-06-30'
 group by card_no
-having count(*)>2;
+having count(*)>3;
 
 -- 3
 delete from book_lending where book_id=222;
@@ -139,6 +139,9 @@ select * from year_of_publication;
 
 -- 5
 create view curavailablebooks as
-select B.book_id,B.title,C.no_of_copies from book B,program l,book_copies C where B.book_id=C.book_id and l.program_id=C.program_id;
+select b.book_id, b.title,
+((select no_of_copies from book_copies where book_id=b.book_id)-
+(select count(*) from book_lending where book_id=b.book_id group by(book_id))) as cnt
+from book b;
 
 select * from curavailablebooks;
