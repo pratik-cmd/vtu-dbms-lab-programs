@@ -138,10 +138,8 @@ select * from book where pyear=2001;
 select * from year_of_publication;
 
 -- 5
-create view curavailablebooks as
-select b.book_id, b.title,
-((select no_of_copies from book_copies where book_id=b.book_id)-
-(select count(*) from book_lending where book_id=b.book_id group by(book_id))) as cnt
-from book b;
+create view curavailablebooks as	
+select B.book_id,B.title,C.no_of_copies from 
+book B,book_copies C where B.book_id=C.book_id;
 
 select * from curavailablebooks;
